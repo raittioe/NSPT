@@ -274,6 +274,7 @@ priors.naive <- c(
   prior(cauchy(0,1), class = sd)
   )
 
+
 #model 1
 br_cal <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + (1|Study), 
@@ -321,6 +322,18 @@ br4 <- brm(
 ) 
 summary(br4)
 exp(fixef(br4))
+
+# including the baseline outcome value in the intervention arm 
+br5 <- brm(
+  lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ROB+CAL_0_m_I+ (1|Study), 
+  prior = priors.naive,
+  chains=1,
+  iter=10000,
+  data = metacal,
+  seed=123
+) 
+summary(br5)
+exp(fixef(br5))
 
 
 #Table 3
@@ -410,6 +423,7 @@ br_ppd <- brm(
 summary(br_ppd)
 exp(fixef(br_ppd))
 
+#model 2
 br2 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+ (1|Study),
   prior = priors.naive,
@@ -421,6 +435,7 @@ br2 <- brm(
 summary(br2)
 exp(fixef(br2))
 
+#model 3
 br3 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ (1|Study), 
   prior = priors.naive,
@@ -432,6 +447,7 @@ br3 <- brm(
 summary(br3)
 exp(fixef(br3))
 
+#model 4
 br4 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ ROB+(1|Study), 
   prior = priors.naive,
@@ -442,6 +458,19 @@ br4 <- brm(
 ) 
 summary(br4)
 exp(fixef(br4))
+
+# including the baseline outcome value in the intervention arm 
+br5 <- brm(
+  lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ROB+PD_0_m_I+ (1|Study), 
+  prior = priors.naive,
+  chains=1,
+  iter=10000,
+  data = metapd,
+  seed=123
+) 
+summary(br5)
+exp(fixef(br5))
+
 
 
 #Table 3
@@ -512,7 +541,7 @@ colSums(metapd3[ (!is.na(metapd3$PD3_3_m_I) | !is.na(metapd3$PD3_6_m_I)) ,c("N_I
 library(brms)
 priors.naive <- c(
   prior(normal(0,0.5), class = Intercept), 
-  prior(cauchy(0,1), class = b, coef = lnRR),
+  prior(cauchy(0,1), class = b),
   prior(cauchy(0,1), class = sd)
 )
 
@@ -530,6 +559,7 @@ br_pd3 <- brm(
 summary(br_pd3)
 exp(fixef(br_pd3))
 
+#model 2
 br2 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+ (1|Study), 
   prior = priors.naive,
@@ -542,6 +572,7 @@ br2 <- brm(
 summary(br2)
 exp(fixef(br2))
 
+#model 3
 br3 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ (1|Study),
   prior = priors.naive,
@@ -554,6 +585,7 @@ br3 <- brm(
 summary(br3)
 exp(fixef(br3))
 
+#model 4
 br4 <- brm(
   lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ROB+ (1|Study), 
   prior = priors.naive,
@@ -566,8 +598,20 @@ br4 <- brm(
 summary(br4)
 exp(fixef(br4))
 
+# including the baseline outcome value in the intervention arm 
+br5 <- brm(
+  lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ROB + PD3_0_m_I +(1|Study), 
+  prior = priors.naive,
+  chains=1,
+  iter=10000,
+  data = metapd3,
+  seed=123
+  ,control = list(adapt_delta = 0.999) # for PD3
+) 
+summary(br5)
+exp(fixef(br5))
 
-
+names(metapd3)
 #Table 3
 
 # Define the values for p and i
@@ -686,6 +730,18 @@ br4 <- brm(
 summary(br4)
 exp(fixef(br4))
 
+br5 <- brm(
+  lnVR|se(seVR) ~ lnRR + lnVR_0 + Comp+Smoke+ROB+ BOP_0_m_I+ (1|Study),
+  prior = priors.naive,
+  chains=1,
+  iter=10000,
+  data = metabop,
+  seed=123
+) 
+summary(br5)
+exp(fixef(br5))
+
+names(metabop)
 
 
 #Table 3
@@ -845,6 +901,17 @@ br4 <- brm(
   seed=123)
 summary(br4)
 exp(fixef(br4))
+
+# including the baseline outcome value in the intervention arm 
+br5 <- brm(
+  lnVR|se(seVR) ~ lnRR + lnVR_0+Comp+Smoke+ROB+t_m_0+(1|Study),
+  prior = priors.naive,
+  chains=1,
+  iter=10000,
+  data = crp,
+  seed=123)
+summary(br5)
+exp(fixef(br5))
 
 
 #Table 3
